@@ -41,6 +41,16 @@
           "id": 301,
           "name": "delcatty",
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/301.png"
+        },
+        {
+          "id": 38,
+          "name": "ninetales",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/38.png"
+        },
+        {
+          "id": 873,
+          "name": "frosmoth",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/873.png"
         }
       ],
       "teams": [
@@ -67,6 +77,15 @@
       ],
       "friends": [],
       "code": "8vwxabs"
+    },
+    {
+      "email": "joseluis@gmail.com",
+      "name": "José Luis",
+      "password": "$2a$10$OAzIrf8mXOtMSG9A968flOqPp3rsdA0YwiYpOgc4nx9s7KEAGtIue",
+      "favorites": [],
+      "teams": [],
+      "friends": [],
+      "code": "zel3ir2"
     }
   ]
 }
