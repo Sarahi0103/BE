@@ -1,0 +1,41 @@
+{
+  "users": [
+    {
+      "email": "karla.gomez.23e@utzmg.edu.mx",
+      "name": "KARLA SARAHI GOMEZ GONZALEZ",
+      "password": "",
+      "googleId": "109879280871008241030",
+      "avatar": "https://lh3.googleusercontent.com/a/ACg8ocJsoivxFzIVWgiaxUedeM-fORQCxoBVgcmBaM6YIxuT4CfYLz0=s96-c",
+      "favorites": [
+        {
+          "id": 3,
+          "name": "venusaur",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png"
+        }
+      ],
+      "teams": [],
+      "friends": [],
+      "code": "74zh410"
+    },
+    {
+      "email": "karla.sarahig1@gmail.com",
+      "name": "Karla Sarahi",
+      "password": "$2a$10$wc.tp0q88DyPpbbrIds0eeUV6Og4OWspbQDHamjunhDznQUiL85Ya",
+      "favorites": [
+        {
+          "id": 29,
+          "name": "nidoran-f",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/29.png"
+        },
+        {
+          "id": 94,
+          "name": "gengar",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/94.png"
+        }
+      ],
+      "teams": [],
+      "friends": [],
+      "code": "8vwxabs"
+    }
+  ]
+}
