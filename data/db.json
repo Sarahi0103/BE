@@ -51,6 +51,11 @@
           "id": 873,
           "name": "frosmoth",
           "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/873.png"
+        },
+        {
+          "id": 14,
+          "name": "kakuna",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/14.png"
         }
       ],
       "teams": [
@@ -75,17 +80,90 @@
           ]
         }
       ],
-      "friends": [],
+      "friends": [
+        {
+          "email": "joseluis@gmail.com",
+          "name": "José Luis",
+          "code": "zel3ir2"
+        }
+      ],
       "code": "8vwxabs"
     },
     {
       "email": "joseluis@gmail.com",
       "name": "José Luis",
       "password": "$2a$10$OAzIrf8mXOtMSG9A968flOqPp3rsdA0YwiYpOgc4nx9s7KEAGtIue",
-      "favorites": [],
+      "favorites": [
+        {
+          "id": 118,
+          "name": "goldeen",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/118.png"
+        },
+        {
+          "id": 7,
+          "name": "squirtle",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png"
+        }
+      ],
       "teams": [],
       "friends": [],
       "code": "zel3ir2"
+    },
+    {
+      "email": "poncho69@gmail.com",
+      "name": "poncho",
+      "password": "$2a$10$SOOYBxd0n6B2eDtKdkZ2MeYAckZKd/dS/i4uXvcGK4rF0OlVHQhjm",
+      "favorites": [
+        {
+          "id": 6,
+          "name": "charizard",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png"
+        },
+        {
+          "id": 4,
+          "name": "charmander",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png"
+        },
+        {
+          "id": 142,
+          "name": "aerodactyl",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/142.png"
+        },
+        {
+          "id": 150,
+          "name": "mewtwo",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png"
+        }
+      ],
+      "teams": [
+        {
+          "name": "sexo69",
+          "pokemons": [
+            {
+              "id": 6,
+              "name": "charizard",
+              "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png"
+            },
+            {
+              "id": 4,
+              "name": "charmander",
+              "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png"
+            },
+            {
+              "id": 142,
+              "name": "aerodactyl",
+              "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/142.png"
+            },
+            {
+              "id": 150,
+              "name": "mewtwo",
+              "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png"
+            }
+          ]
+        }
+      ],
+      "friends": [],
+      "code": "o62v9r9"
     }
   ]
 }

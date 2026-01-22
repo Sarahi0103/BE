@@ -7,7 +7,21 @@ const axios = require('axios');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require('express-session');
-const { getUserByEmail, createUser, updateUser, readDB } = require('./lib/db');
+const { 
+  getUserByEmail, 
+  getUserByCode,
+  createUser, 
+  updateUser,
+  getFavorites,
+  addFavorite,
+  removeFavorite,
+  getTeams,
+  addTeam,
+  updateTeam,
+  deleteTeam,
+  getFriends,
+  addFriend
+} = require('./lib/db');
 
 const app = express();
 
@@ -51,11 +65,6 @@ passport.use(new GoogleStrategy({
           email: email,
           name: profile.displayName || profile.emails[0].value.split('@')[0],
           password: '', // No password for OAuth users
-          googleId: profile.id,
-          avatar: profile.photos?.[0]?.value || '',
-          favorites: [],
-          teams: [],
-          friends: [],
           code: Math.random().toString(36).slice(2, 9)
         };
         await createUser(user);
@@ -112,9 +121,6 @@ app.post('/auth/register', async (req,res)=>{
     email,
     name: name || '',
     password: hash,
-    favorites: [],
-    teams: [],
-    friends: [],
     code: Math.random().toString(36).slice(2,9)
   };
   await createUser(user);
@@ -207,79 +213,109 @@ app.get('/api/pokemon-evolution/:id', async (req,res)=>{
 
 // Favorites
 app.get('/api/favorites', authMiddleware, async (req,res)=>{
-  const user = await getUserByEmail(req.user.email);
-  res.json({ favorites: user.favorites || [] });
+  try{
+    const user = await getUserByEmail(req.user.email);
+    const favorites = await getFavorites(user.id);
+    res.json({ favorites });
+  }catch(e){
+    console.error(e);
+    res.status(500).json({ error: 'Database error' });
+  }
 });
 
 app.post('/api/favorites', authMiddleware, async (req,res)=>{
-  const { pokemon } = req.body;
-  if(!pokemon) return res.status(400).json({ error: 'pokemon required' });
-  const user = await getUserByEmail(req.user.email);
-  user.favorites = user.favorites || [];
-  if(!user.favorites.find(p => p.id === pokemon.id)) user.favorites.push(pokemon);
-  await updateUser(user.email, { favorites: user.favorites });
-  res.json({ favorites: user.favorites });
-});
-
-app.delete('/api/favorites/:id', authMiddleware, async (req,res)=>{
-  const id = req.params.id;
-  const user = await getUserByEmail(req.user.email);
-  user.favorites = (user.favorites || []).filter(p => String(p.id) !== String(id));
-  await updateUser(user.email, { favorites: user.favorites });
-  res.json({ favorites: user.favorites });
+  try{
+    const { pokemon } = req.body;
+    if(!pokemon) return res.status(400).json({ error: 'pokemon required' });
+    const user = await getUserByEmail(req.user.email);
+    await addFavorite(user.id, pokemon);
+    const favorites = await getFavorites(user.id);
+    res.json({ favorites });
+  }catch(e){
+    console.error(e);
+    res.status(500).json({ error: 'Database error' });
+  }
 });
 
 // Teams (simple CRUD)
 app.get('/api/teams', authMiddleware, async (req,res)=>{
-  const user = await getUserByEmail(req.user.email);
-  res.json({ teams: user.teams || [] });
+  try{
+    const user = await getUserByEmail(req.user.email);
+    const teams = await getTeams(user.id);
+    res.json({ teams });
+  }catch(e){
+    console.error(e);
+    res.status(500).json({ error: 'Database error' });
+  }
 });
 
 app.post('/api/teams', authMiddleware, async (req,res)=>{
-  const { team } = req.body;
-  const user = await getUserByEmail(req.user.email);
-  user.teams = user.teams || [];
-  user.teams.push(team);
-  await updateUser(user.email, { teams: user.teams });
-  res.json({ teams: user.teams });
+  try{
+    const { team } = req.body;
+    const user = await getUserByEmail(req.user.email);
+    await addTeam(user.id, team);
+    const teams = await getTeams(user.id);
+    res.json({ teams });
+  }catch(e){
+    console.error(e);
+    res.status(500).json({ error: 'Database error' });
+  }
 });
 
 app.put('/api/teams/:idx', authMiddleware, async (req,res)=>{
-  const idx = Number(req.params.idx);
-  const { team } = req.body;
-  const user = await getUserByEmail(req.user.email);
-  if(!user.teams || !user.teams[idx]) return res.status(404).json({ error: 'Not found' });
-  user.teams[idx] = team;
-  await updateUser(user.email, { teams: user.teams });
-  res.json({ teams: user.teams });
+  try{
+    const idx = Number(req.params.idx);
+    const { team } = req.body;
+    const user = await getUserByEmail(req.user.email);
+    await updateTeam(user.id, idx, team);
+    const teams = await getTeams(user.id);
+    res.json({ teams });
+  }catch(e){
+    console.error(e);
+    res.status(500).json({ error: 'Database error' });
+  }
 });
 
 app.delete('/api/teams/:idx', authMiddleware, async (req,res)=>{
-  const idx = Number(req.params.idx);
-  const user = await getUserByEmail(req.user.email);
-  user.teams = (user.teams || []).filter((t,i) => i !== idx);
-  await updateUser(user.email, { teams: user.teams });
-  res.json({ teams: user.teams });
+  try{
+    const idx = Number(req.params.idx);
+    const user = await getUserByEmail(req.user.email);
+    await deleteTeam(user.id, idx);
+    const teams = await getTeams(user.id);
+    res.json({ teams });
+  }catch(e){
+    console.error(e);
+    res.status(500).json({ error: 'Database error' });
+  }
 });
 
 // Friends: add by code
 app.get('/api/friends', authMiddleware, async (req,res)=>{
-  const user = await getUserByEmail(req.user.email);
-  res.json({ friends: user.friends || [] });
+  try{
+    const user = await getUserByEmail(req.user.email);
+    const friends = await getFriends(user.id);
+    res.json({ friends });
+  }catch(e){
+    console.error(e);
+    res.status(500).json({ error: 'Database error' });
+  }
 });
 
 app.post('/api/friends/add', authMiddleware, async (req,res)=>{
-  const { code } = req.body;
-  if(!code) return res.status(400).json({ error: 'code required' });
-  const dbUser = await getUserByEmail(req.user.email);
-  // simple: search user by code
-  const db = (await require('./lib/db').readDB());
-  const friend = db.users.find(u => u.code === code);
-  if(!friend) return res.status(404).json({ error: 'No user with that code' });
-  dbUser.friends = dbUser.friends || [];
-  if(!dbUser.friends.find(f => f.email === friend.email)) dbUser.friends.push({ email: friend.email, name: friend.name, code: friend.code });
-  await updateUser(dbUser.email, { friends: dbUser.friends });
-  res.json({ friends: dbUser.friends });
+  try{
+    const { code } = req.body;
+    if(!code) return res.status(400).json({ error: 'code required' });
+    const user = await getUserByEmail(req.user.email);
+    const friend = await getUserByCode(code);
+    if(!friend) return res.status(404).json({ error: 'No user with that code' });
+    if(friend.id === user.id) return res.status(400).json({ error: 'Cannot add yourself' });
+    await addFriend(user.id, friend.id);
+    const friends = await getFriends(user.id);
+    res.json({ friends });
+  }catch(e){
+    console.error(e);
+    res.status(500).json({ error: 'Database error' });
+  }
 });
 
 // Simple battle simulation between two users' Pokémon
