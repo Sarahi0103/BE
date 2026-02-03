@@ -27,7 +27,7 @@ const app = express();
 
 // CORS configuration for OAuth
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: ['http://localhost:5173', 'http://localhost:5174', process.env.FRONTEND_URL].filter(Boolean),
   credentials: true
 }));
 
@@ -112,32 +112,42 @@ app.get('/', (req,res)=> res.json({ ok: true, name: 'Pokedex BFF' }));
 
 // Auth
 app.post('/auth/register', async (req,res)=>{
-  const { email, password, name } = req.body;
-  if(!email || !password) return res.status(400).json({ error: 'Email and password required' });
-  const existing = await getUserByEmail(email);
-  if(existing) return res.status(400).json({ error: 'User exists' });
-  const hash = await bcrypt.hash(password, 10);
-  const user = {
-    email,
-    name: name || '',
-    password: hash,
-    code: Math.random().toString(36).slice(2,9)
-  };
-  await createUser(user);
-  const token = generateToken({ email });
-  res.json({ token, user: { email, name: user.name, code: user.code } });
+  try{
+    const { email, password, name } = req.body;
+    if(!email || !password) return res.status(400).json({ error: 'Email and password required' });
+    const existing = await getUserByEmail(email);
+    if(existing) return res.status(400).json({ error: 'User exists' });
+    const hash = await bcrypt.hash(password, 10);
+    const user = {
+      email,
+      name: name || '',
+      password: hash,
+      code: Math.random().toString(36).slice(2,9)
+    };
+    await createUser(user);
+    const token = generateToken({ email });
+    res.json({ token, user: { email, name: user.name, code: user.code } });
+  }catch(e){
+    console.error('Register error:', e);
+    res.status(500).json({ error: 'Database error' });
+  }
 });
 
 app.post('/auth/login', async (req,res)=>{
-  const { email, password } = req.body;
-  if(!email || !password) return res.status(400).json({ error: 'Email and password required' });
-  const user = await getUserByEmail(email);
-  if(!user) return res.status(400).json({ error: 'Invalid credentials' });
-  if(!user.password) return res.status(400).json({ error: 'Please use Google Sign-In for this account' });
-  const ok = await bcrypt.compare(password, user.password);
-  if(!ok) return res.status(400).json({ error: 'Invalid credentials' });
-  const token = generateToken({ email });
-  res.json({ token, user: { email: user.email, name: user.name, code: user.code } });
+  try{
+    const { email, password } = req.body;
+    if(!email || !password) return res.status(400).json({ error: 'Email and password required' });
+    const user = await getUserByEmail(email);
+    if(!user) return res.status(400).json({ error: 'Invalid credentials' });
+    if(!user.password) return res.status(400).json({ error: 'Please use Google Sign-In for this account' });
+    const ok = await bcrypt.compare(password, user.password);
+    if(!ok) return res.status(400).json({ error: 'Invalid credentials' });
+    const token = generateToken({ email });
+    res.json({ token, user: { email: user.email, name: user.name, code: user.code } });
+  }catch(e){
+    console.error('Login error:', e);
+    res.status(500).json({ error: 'Database error' });
+  }
 });
 
 // Google OAuth Routes
